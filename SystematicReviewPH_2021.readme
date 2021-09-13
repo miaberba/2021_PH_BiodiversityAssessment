@@ -39,309 +39,307 @@
 # (*) - manually edited files using Google Sheet (though may also be done via MS Excel)
 
 # 01_GBIF1_dataprocessing.R separately loads the raw animal and plant data obtained from the Global Biodiversity Information Facility (GBIF) database  
-#			and combines them into one dataframe. A subset of GBIF animal and plant data is also generated based on unique species and will be used for 
-#			GenBank data processing.
+#		and combines them into one dataframe. A subset of GBIF animal and plant data is also generated based on unique species and will be used for 
+#		GenBank data processing.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#                   a) GBIF_plant_occurrence.txt					a) gbif01_raw_overall
-#                   b) GBIF_animal_occurrence.txt					b) SubUnique_animals
-#                                                           		c) SubUnique_animals
+#			INPUT FILES:							OUTPUT FILES:
+#                   	a) GBIF_plant_occurrence.txt					a) gbif01_raw_overall
+#                   	b) GBIF_animal_occurrence.txt					b) SubUnique_animals
+#                                                           				c) SubUnique_animals
 
 
 # 01_GBIF2_dataprocessing.R parses through the geolocation metadata in the raw GBIF dataset by matching explicit entries or patterns with known
-#			administrative names for province, municipality, and barangay in the locationInfo.table data in order to categorize the administrative 
-#			unit that each represents.
+#		administrative names for province, municipality, and barangay in the locationInfo.table data in order to categorize the administrative 
+#		unit that each represents.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#                   a) locationInfo.table						    a) gbif02_geoclassified_overall
-#                   b) gbif01_raw_overall
+#			INPUT FILES:							OUTPUT FILES:
+#                   	a) locationInfo.table						a) gbif02_geoclassified_overall
+#                   	b) gbif01_raw_overall
 
 				
 # misc_functions.R contains two functions created to aid in parsing through GBIF geolocation info to do the following: (1) categorize geolocation 
-#			entries based on patterns and (2) summarize final category of each entry. This script must be used with 01_GBIF2_dataprocessing.R 
+#		entries based on patterns and (2) summarize final category of each entry. This script must be used with 01_GBIF2_dataprocessing.R 
 
 
 # 01_GBIF3_dataprocessing.R conducts another stage of GBIF geolocation parsing that involves examining for problematic geolocation entries
-#			(i.e., categorized as MULTIPLE and has no coordinate info), which are then manually edited and cleaned through both Google 
-#			Sheets and R. 
+#		(i.e., categorized as MULTIPLE and has no coordinate info), which are then manually edited and cleaned through both Google 
+#		Sheets and R. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) gbif02_geoclassified_overall					a) gbif_multiple_geofix.tsv (to be subjected to manual editing)
-#					b) gbif_multiplegeo_done.tsv (*)				b) gbif03_fixed_multigeo_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) gbif02_geoclassified_overall					a) gbif_multiple_geofix.tsv (to be subjected to manual editing)
+#			b) gbif_multiplegeo_done.tsv (*)				b) gbif03_fixed_multigeo_overall
 
 
 # 01_GBIF4_dataprocessing.R performs the last set of geolocation parsing on the GBIF dataset, where the geolocation entries are organized into new
-#			metadata columns based on what final administrative unit they have been categorized as. Then, two rounds of data cleaning is conducted
-#			on the parsed "province" entries to pull out the patterns that only refer to provinces. The output in this script serves as the final 
-#			updated version of the raw overall GBIF dataset.
+#		metadata columns based on what final administrative unit they have been categorized as. Then, two rounds of data cleaning is conducted
+#		on the parsed "province" entries to pull out the patterns that only refer to provinces. The output in this script serves as the final 
+#		updated version of the raw overall GBIF dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) gbif03_fixed_multigeo_overall				a) gbif04_finalgeo_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) gbif03_fixed_multigeo_overall				a) gbif04_finalgeo_overall
 
 
 # 02_SpeciesData_rawsubset.R generates a subset of the final raw GBIF dataset that only contains the metadata columns needed for the analysis, which 
-#			belong to the following categories: records, taxonomy, publication, and geolocation. These columns are analogous to those that will 
-#			be pulled out from the barcode dataset. 
+#		belong to the following categories: records, taxonomy, publication, and geolocation. These columns are analogous to those that will 
+#		be pulled out from the barcode dataset. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) gbif04_finalgeo_overall						a) overall_species_data
+#			INPUT FILES:							OUTPUT FILES:
+#			a) gbif04_finalgeo_overall					a) overall_species_data
 
 
 # 03_GenBank1_dataprocessing.R generates readable individual files for each GenBank record pulled out from the raw files (.gb) downloaded directly 
-#			from the GenBank database. There are eight (8) raw GenBank files, each associated with a specific gene marker of interest (i.e.,
-#			COI, CYTB, ITS2, rbcL, or matK) and organism category (i.e., animal or plant). The individual files generated will require further
-#			parsing to place the barcode data into a workable dataframe.
+#		from the GenBank database. There are eight (8) raw GenBank files, each associated with a specific gene marker of interest (i.e.,
+#		COI, CYTB, ITS2, rbcL, or matK) and organism category (i.e., animal or plant). The individual files generated will require further
+#		parsing to place the barcode data into a workable dataframe.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) GenBank_COI_animals.gb						a) Files from "COMBINED GenBank Individual" Folder
-#					b) GenBank_CYTB_animals.gb
-#					c) GenBank_ITS2_animals.gb
-#					d) GenBank_COI_plants.gb
-#					e) GenBank_CYTB_plants.gb
-#					f) GenBank_ITS2_plants.gb
-#					g) GenBank_rbcl_plants.gb
-#					h) GenBank_matK_plants.gb
+#			INPUT FILES:							OUTPUT FILES:
+#			a) GenBank_COI_animals.gb					a) Files from "COMBINED GenBank Individual" Folder
+#			b) GenBank_CYTB_animals.gb
+#			c) GenBank_ITS2_animals.gb
+#			d) GenBank_COI_plants.gb
+#			e) GenBank_CYTB_plants.gb
+#			f) GenBank_ITS2_plants.gb
+#			g) GenBank_rbcl_plants.gb
+#			h) GenBank_matK_plants.gb
 
 
 # 03_GenBank2_dataprocessing.R performs specific functions in GenBank_functions.R created to pull out the necessary information from each individual
-#			GenBank files - all of which are compiled into one workable dataframe. The kind of information obtained are on taxonomy, author, 
-#			publishing institution, gene marker, barcode sequence, and other metadata associated with the sample specimen.
+#		GenBank files - all of which are compiled into one workable dataframe. The kind of information obtained are on taxonomy, author, 
+#		publishing institution, gene marker, barcode sequence, and other metadata associated with the sample specimen.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) GenBank_functions.R							a) genbank01_working_overall
-#					b) Files from "COMBINED GenBank 
-#						Individual" Folder
+#			INPUT FILES:							OUTPUT FILES:
+#			a) GenBank_functions.R						a) genbank01_working_overall
+#			b) Files from "COMBINED GenBank Individual" Folder
 
 
 # GenBank_functions.R contains seven functions created to pull out the following information from individual GenBank files: (1) taxonomy of the 
-#			specimen; (2) publishing author; (3) publishing institution; (4) metadata associated with the “source”; (5) gene marker; and 
-#			(6) barcoding sequence. This script must be used with 03_GenBank2_dataprocessing.R 
+#		specimen; (2) publishing author; (3) publishing institution; (4) metadata associated with the “source”; (5) gene marker; and 
+#		(6) barcoding sequence. This script must be used with 03_GenBank2_dataprocessing.R 
 		
 
 # 03_GenBank3_dataprocessing.R parses through the metadata associated with the sample specimen (SOURCE) such that the information on the category 
-#			names are organized into column headers and the corresponding values are sorted into the appropriate column. This is the first
-#			set of metadata parsing on the raw GenBank dataset.
+#		names are organized into column headers and the corresponding values are sorted into the appropriate column. This is the first
+#		set of metadata parsing on the raw GenBank dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) genbank01_working_overall					a) genbank02_metasort_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) genbank01_working_overall					a) genbank02_metasort_overall
 
 
 # 03_GenBank4_dataprocessing.R parses through the records metadata on taxon number and Barcode of Life Data System (BOLD) cross-reference info, 
-#			which are originally combined into one entry. Each entry is split into its two main components (though not all records have BOLD 
-#			cross-ref info) and placed into new appropriate columns. This is the second set of metadata parsing on the raw GenBank dataset.
+#		which are originally combined into one entry. Each entry is split into its two main components (though not all records have BOLD 
+#		cross-ref info) and placed into new appropriate columns. This is the second set of metadata parsing on the raw GenBank dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) genbank02_metasort_overall					a) genbank03_metaxref_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) genbank02_metasort_overall					a) genbank03_metaxref_overall
 
 
 # 03_GenBank5_dataprocessing.R parses through the taxonomic metadata with the help of a taxonomic database derived from the GBIF subset of unique 
-#			species. In each taxonomic entry, only the names recognized as names of either phylum, class, order, family, or genus are pulled out 
-#			and placed into their respective taxonomy columns. This is the third set of metadata parsing on the raw GenBank dataset.
+#		species. In each taxonomic entry, only the names recognized as names of either phylum, class, order, family, or genus are pulled out 
+#		and placed into their respective taxonomy columns. This is the third set of metadata parsing on the raw GenBank dataset.
 #
-#					INPUT FILES: 									OUTPUT FILES:
-#					a) SubUnique_animals							a) genbank04_taxofixed_overall
-#					b) SubUnique_plants
-#					c) genbank03_metaxref_overall
+#			INPUT FILES: 							OUTPUT FILES:
+#			a) SubUnique_animals						a) genbank04_taxofixed_overall
+#			b) SubUnique_plants
+#			c) genbank03_metaxref_overall
 
 
 # 03_GenBank6_dataprocessing.R parses through the metadata on sampling coordinates, which requires splitting the entries into their latitude and 
-#			longitude components and converting them into numerical values. This is the fourth set of metadata parsing on the raw GenBank dataset.
+#		longitude components and converting them into numerical values. This is the fourth set of metadata parsing on the raw GenBank dataset.
 #
-#					INPUT FILES: 									OUTPUT FILES:
-#					a) genbank04_taxofixed_overall					a) genbank05_latlonfixed_overall
+#			INPUT FILES: 							OUTPUT FILES:
+#			a) genbank04_taxofixed_overall					a) genbank05_latlonfixed_overall
 	
 
 # 03_GenBank7_dataprocessing.R parses through the publishing metadata, which is done mostly through manual editing outside R to pull out the information
-#			on the specific institute and/or university and country linked to submitting the GenBank data. The purpose of this script is to generate 
-#			the subset of GenBank data based on the unique entries that contained the combined information of publishing institution and country then, 
-#			later, to combine the edited version into the main dataset. This is the fifth set of metadata parsing on the raw GenBank dataset.
+#		on the specific institute and/or university and country linked to submitting the GenBank data. The purpose of this script is to generate 
+#		the subset of GenBank data based on the unique entries that contained the combined information of publishing institution and country then, 
+#		later, to combine the edited version into the main dataset. This is the fifth set of metadata parsing on the raw GenBank dataset.
 # 
-#					INPUT FILES:									OUTPUT FILES:
-#					a) genbank05_latlonfixed_overall				a) GnBk_insti_sorting.csv (to be subjected to manual editing)
-#					b) GnBk_insti_parsed.csv (*)					b) genbank06_instiparsed_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) genbank05_latlonfixed_overall				a) GnBk_insti_sorting.csv (to be subjected to manual editing)
+#			b) GnBk_insti_parsed.csv (*)					b) genbank06_instiparsed_overall
 
 
 # 03_GenBank8_dataprocessing.R parses through the gene marker metadata, which is also done mostly through manual editing outside R to verify and 
-#			standardize the entries referring to the gene markers of interest (i.e., COI, CYTB, ITS2, rbcL, and matK). Similar to the previous script, 
-#			the purpose of this script is to generate the subset of GenBank data containing only metadata on gene marker and accession number then, 
-#			later, to combine the edited version into the main dataset. This is the sixth set of metadata parsing on the raw GenBank dataset.
+#		standardize the entries referring to the gene markers of interest (i.e., COI, CYTB, ITS2, rbcL, and matK). Similar to the previous script, 
+#		the purpose of this script is to generate the subset of GenBank data containing only metadata on gene marker and accession number then, 
+#		later, to combine the edited version into the main dataset. This is the sixth set of metadata parsing on the raw GenBank dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) genbank06_instiparsed_overall				a) GnBk_marker_all.csv (to be subjected to manual editing)
-#					b) GnBk_genemarker_parsed.tsv (*)				b) genbank07_markerparsed_overall
+#			INPUT FILES:							OUTPUT FILES:
+#			a) genbank06_instiparsed_overall				a) GnBk_marker_all.csv (to be subjected to manual editing)
+#			b) GnBk_genemarker_parsed.tsv (*)				b) genbank07_markerparsed_overall
 
 
 # 03_GenBank9_dataprocessing.R parses through the metadata on the sampling location description, which is done through both R and manual editing outside 
-#			R to match explicit entries or patterns with known administrative names (i.e., province, municipality, and barangay) then manually assess  
-#			each unique entry for correctness and edit if necessary. Coordinate information found in the sampling description are also parsed and included 
-#			in the main GenBank data. This is the seventh and last set of metadata parsing on the raw GenBank dataset, generating the final updated version
-#			of the raw overall dataset.
+#		R to match explicit entries or patterns with known administrative names (i.e., province, municipality, and barangay) then manually assess  
+#		each unique entry for correctness and edit if necessary. Coordinate information found in the sampling description are also parsed and included 
+#		in the main GenBank data. This is the seventh and last set of metadata parsing on the raw GenBank dataset, generating the final updated version
+#		of the raw overall dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) locationInfo.table							a) GnBk_geolocation_parsing.csv (to be subjected to manual editing)
-#					b) genbank07_markerparsed_overall				b) GnBk_mergedgeo_brgxmun.csv (to be subjected to manual editing)
-#					c) GnBk_edited_location_parsing.csv (*)			c) genbank08_geoparsed_overall_FINAL
-#					d) GnBk_finalgeo_parsed.tsv (*)	
+#			INPUT FILES:							OUTPUT FILES:
+#			a) locationInfo.table						a) GnBk_geolocation_parsing.csv (to be subjected to manual editing)
+#			b) genbank07_markerparsed_overall				b) GnBk_mergedgeo_brgxmun.csv (to be subjected to manual editing)
+#			c) GnBk_edited_location_parsing.csv (*)				c) genbank08_geoparsed_overall_FINAL
+#			d) GnBk_finalgeo_parsed.tsv (*)	
 
 
 # 04_BOLD1_dataprocessing.R separately loads the raw data for each animal and plant phylum obtained from BOLD and combines them into one dataframe.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) BOLD_Tardigrada.txt							a) bold01_raw_overall
-#					b) BOLD_Rotifera.txt
-#					c) BOLD_Porifera.txt
-#					d) BOLD_Platyhelminthes.txt
-#					e) BOLD_Nemertea.txt
-#					f) BOLD_Nematoda.txt
-#					g) BOLD_Mollusca.txt
-#					h) BOLD_Echinodermata.txt
-#					i) BOLD_Ctenophora.txt
-#					j) BOLD_Chordata.txt
-#					k) BOLD_Arthropoda.txt
-#					l) BOLD_Annelida.txt
-#					m) BOLD_Rhodophyta.txt
-#					n) BOLD_Pteridophyta.txt
-#					o) BOLD_Pinophyta.txt
-#					p) BOLD_Magnoliophyta.txt
-#					q) BOLD_Chlorophyta.txt
-#					r) BOLD_Bryophyta.txt
+#			INPUT FILES:							OUTPUT FILES:
+#			a) BOLD_Tardigrada.txt						a) bold01_raw_overall
+#			b) BOLD_Rotifera.txt
+#			c) BOLD_Porifera.txt
+#			d) BOLD_Platyhelminthes.txt
+#			e) BOLD_Nemertea.txt
+#			f) BOLD_Nematoda.txt
+#			g) BOLD_Mollusca.txt
+#			h) BOLD_Echinodermata.txt
+#			i) BOLD_Ctenophora.txt
+#			j) BOLD_Chordata.txt
+#			k) BOLD_Arthropoda.txt
+#			l) BOLD_Annelida.txt
+#			m) BOLD_Rhodophyta.txt
+#			n) BOLD_Pteridophyta.txt
+#			o) BOLD_Pinophyta.txt
+#			p) BOLD_Magnoliophyta.txt
+#			q) BOLD_Chlorophyta.txt
+#			r) BOLD_Bryophyta.txt
 
 
 # 04_BOLD2_dataprocessing.R parses through the metadata on the sampling location description. Similar to the geolocation parsing done for the GenBank 
-#			dataset, this was done through both R and manual editing outside R. The processes involved for matching and assessing are also same, with 
-#			entries being manually edited if necessary. This is the first set of metadata parsing on the raw BOLD dataset
+#		dataset, this was done through both R and manual editing outside R. The processes involved for matching and assessing are also same, with 
+#		entries being manually edited if necessary. This is the first set of metadata parsing on the raw BOLD dataset
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) locationInfo.table							a) bold_unique_geolocation.csv (to be subjected to manual editing)
-#					b) bold01_raw_overall							b) bold_mergedgeo_brgxmun.csv (to be subjected to manual editing)
-#					c) bold_geoparsing_edited.tsv (*)				c) bold02_geoparsed_overall
-#					d) bold_finalgeo_parsed.tsv (*)
+#			INPUT FILES:							OUTPUT FILES:
+#			a) locationInfo.table						a) bold_unique_geolocation.csv (to be subjected to manual editing)
+#			b) bold01_raw_overall						b) bold_mergedgeo_brgxmun.csv (to be subjected to manual editing)
+#			c) bold_geoparsing_edited.tsv (*)				c) bold02_geoparsed_overall
+#			d) bold_finalgeo_parsed.tsv (*)
 
 
 # 04_BOLD3_dataprocessing.R parses through the publishing metadata by generating a subset of unique BOLD entries for publishing institution, which 
-#			may be referring to the storing, copyright, or sequencing institution though no explicit metadata has been provided. Then, countries are 
-#			manually assigned to each institution based on where they are located, allowing us to incorporate information on publishing country
-#			into the main dataset. This is the second and last set of metadata parsing on the raw BOLD dataset, generating the final updated 
-#			version of the raw overall dataset.
+#		may be referring to the storing, copyright, or sequencing institution though no explicit metadata has been provided. Then, countries are 
+#		manually assigned to each institution based on where they are located, allowing us to incorporate information on publishing country
+#		into the main dataset. This is the second and last set of metadata parsing on the raw BOLD dataset, generating the final updated 
+#		version of the raw overall dataset.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) bold02_geoparsed_overall						a) bold_instistoring.csv (to be subjected to manual editing)
-#					b) bold_instistoring_country.tsv (*)			b) bold_copyright.csv (to be subjected to manual editing)
-#					c) bold_sequencing_country.tsv (*)				c) bold_sequencing.csv (to be subjected to manual editing)
-#					d) bold_copyright_country.tsv (*)				d) bold03_instiupdate_overall_FINAL
+#			INPUT FILES:							OUTPUT FILES:
+#			a) bold02_geoparsed_overall					a) bold_instistoring.csv (to be subjected to manual editing)
+#			b) bold_instistoring_country.tsv (*)				b) bold_copyright.csv (to be subjected to manual editing)
+#			c) bold_sequencing_country.tsv (*)				c) bold_sequencing.csv (to be subjected to manual editing)
+#			d) bold_copyright_country.tsv (*)				d) bold03_instiupdate_overall_FINAL
 
 
 # 05_BarcodeData_rawsubset.R subsets both GenBank and BOLD datasets to contain only the metadata columns needed for the analysis, which belong to the  
-#			following categories: records, taxonomy, publication, and geolocation. Minor edits are done for some metadata to standardize the entries 
-#			between GenBank and BOLD. Both subsets are then combined to generate one workable dataframe. Most of the columns (except sequence info) 
-#			are analogous to those pulled out from the species occurrence dataset. 
+#		following categories: records, taxonomy, publication, and geolocation. Minor edits are done for some metadata to standardize the entries 
+#		between GenBank and BOLD. Both subsets are then combined to generate one workable dataframe. Most of the columns (except sequence info) 
+#		are analogous to those pulled out from the species occurrence dataset. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) genbank08_geoparsed_overall_FINAL			a) overall_barcode_data
-#					b) bold03_instiupdate_overall_FINAL
+#			INPUT FILES:							OUTPUT FILES:
+#			a) genbank08_geoparsed_overall_FINAL				a) overall_barcode_data
+#			b) bold03_instiupdate_overall_FINAL
 
 
 # 06_PreAnalysis_datapreparation.R performs additional parsing of metadata for sampling country and submission year (later integrated) and editing of  
-#			taxonomic information in the barcode data. Then, unwanted records are excluded from either datasets based on the following criteria: duplicates,  
-#			gene markers not of interest, foreign samples, and /Homo/ specimens. The outputs of this script serve as the final working datasets for both 
-#			barcode (working_barcode_data_FINAL.table) and species data (working_species_data_FINAL.table) that will be used for the analyses. 
+#		taxonomic information in the barcode data. Then, unwanted records are excluded from either datasets based on the following criteria: duplicates,  
+#		gene markers not of interest, foreign samples, and /Homo/ specimens. The outputs of this script serve as the final working datasets for both 
+#		barcode (working_barcode_data_FINAL.table) and species data (working_species_data_FINAL.table) that will be used for the analyses. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) overall_species_data							a) working_barcode_data_FINAL.table
-#					b) overall_barcode_data							b) working_species_data_FINAL.table
-#					c) Files from "COMBINED GenBank 
-#						Individual" Folder
+#			INPUT FILES:							OUTPUT FILES:
+#			a) overall_species_data						a) working_barcode_data_FINAL.table
+#			b) overall_barcode_data						b) working_species_data_FINAL.table
+#			c) Files from "COMBINED GenBank Individual" Folder
 
 
 # 07_Analysis1_metagaps_NAinclude.R summarizes the final barcode and species occurrence data that is analyzed overall count and in terms of each gene 
-#			marker of interest. It also performs the first approach to systematically reviewing Philippine (PH) biodiversity - examination for metadata 
-#			gaps. This is done by determining the proportion of missing information for each metadata category of interest (i.e., records and publishing, 
-#			geolocation, and taxonomic information). For taxonomic metadata, we have given focus on comparing the relationship between the rate of species 
-#			identification inbarcode data and the percent of barcoded species represented in barcode and species occurrence data at the phylum, class, order, 
-#			and family levels. This analysis includes barcode records that are NA for the country sampled, despite searches being filtered geographically.
+#		marker of interest. It also performs the first approach to systematically reviewing Philippine (PH) biodiversity - examination for metadata 
+#		gaps. This is done by determining the proportion of missing information for each metadata category of interest (i.e., records and publishing, 
+#		geolocation, and taxonomic information). For taxonomic metadata, we have given focus on comparing the relationship between the rate of species 
+#		identification inbarcode data and the percent of barcoded species represented in barcode and species occurrence data at the phylum, class, order, 
+#		and family levels. This analysis includes barcode records that are NA for the country sampled, despite searches being filtered geographically.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) GeneMarker_summary_NAinclude.pdf
-#					b) working_barcode_data_FINAL.table				b) GeoIssues_summary_NAinclude.pdf
-#																	c) SpeciesID_phylum_NAinclude.pdf
-#																	d) SpeciesID_class_NAinclude.pdf
-#																	e) SpeciesID_order_NAinclude.pdf
-#																	f) SpeciesID_family_NAinclude.pdf
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) GeneMarker_summary_NAinclude.pdf
+#			b) working_barcode_data_FINAL.table				b) GeoIssues_summary_NAinclude.pdf
+#											c) SpeciesID_phylum_NAinclude.pdf
+#											d) SpeciesID_class_NAinclude.pdf
+#											e) SpeciesID_order_NAinclude.pdf
+#											f) SpeciesID_family_NAinclude.pdf
 
 
 # 07_Analysis2_taxobias_NAinclude.R performs the second approach to systematically reviewing PH biodiversity - examination for taxonomic biases. This 
-#			is done by comparing the state of species occurrence and barcode documentation for each taxon at different taxonomic (i.e., phylum, class,
-#			order, and family).This analysis includes barcode records that are NA for the country sampled, despite searches being filtered geographically.
+#		is done by comparing the state of species occurrence and barcode documentation for each taxon at different taxonomic (i.e., phylum, class,
+#		order, and family).This analysis includes barcode records that are NA for the country sampled, despite searches being filtered geographically.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) geneXspecies_phylum_NAinclude.pdf
-#					b) working_barcode_data_FINAL.table				b) geneXspecies_class_NAinclude.pdf
-#																	c) geneXspecies_order_NAinclude.pdf
-#																	d) geneXspecies_family_NAinclude.pdf
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) geneXspecies_phylum_NAinclude.pdf
+#			b) working_barcode_data_FINAL.table				b) geneXspecies_class_NAinclude.pdf
+#											c) geneXspecies_order_NAinclude.pdf
+#											d) geneXspecies_family_NAinclude.pdf
 
 
 # 07_Analysis3_spatialbias_NAinclude.R performs the third and last approach to systematically reviewing PH biodiversity - examination for spatial 
-#			biases. This is done by analyzing for three aspects of spatial bias: (1) sampling distribution of barcode and species data; (2) global 
-#			contribution of barcode data overall and across time; and (3) national contribution of barcode data based on the leading regions 
-#			processing the data versus regions being sampled. This analysis includes barcode records that are NA for the country sampled, despite 
-#			searches being filtered geographically.
+#		biases. This is done by analyzing for three aspects of spatial bias: (1) sampling distribution of barcode and species data; (2) global 
+#		contribution of barcode data overall and across time; and (3) national contribution of barcode data based on the leading regions 
+#		processing the data versus regions being sampled. This analysis includes barcode records that are NA for the country sampled, despite 
+#		searches being filtered geographically.
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) resTemp_speciesUpdate.rds
-#					b) working_barcode_data_FINAL.table				b) GeneheatmapRawScaleNoBroder_NAinclude.pdf
-#					c) phl_admbnda_adm2_psa_namria_20200529			c) SpeciesheatmapRawScaleNoBorder_NAinclude.pdf
-#					d) PHuniversity_province.tsv (*)				d) geneXspecies_province_NAinclude.pdf
-#					e) region_name.tsv (*)							e) worldBarcodeDist_NAinclude.pdf
-#					f) phl_admbnda_adm1_psa_namria_20200529			f) worldBarcodeDist_philZoom_NAinclude.pdf
-#																	g) geneXyearCollect_NAinclude.pdf
-#																	h) geneXyearSubmission_NAinclude.pdf
-#																	i) provinceRegionInfo.table
-#																	j) refmapRegion_NAinclude.pdf
-#																	k) sourceXprocess_matrix_NAinclude.pdf
-#																	l) UPDATEworking_barcode_data_NAinclude.table
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) resTemp_speciesUpdate.rds
+#			b) working_barcode_data_FINAL.table				b) GeneheatmapRawScaleNoBroder_NAinclude.pdf
+#			c) phl_admbnda_adm2_psa_namria_20200529				c) SpeciesheatmapRawScaleNoBorder_NAinclude.pdf
+#			d) PHuniversity_province.tsv (*)				d) geneXspecies_province_NAinclude.pdf
+#			e) region_name.tsv (*)						e) worldBarcodeDist_NAinclude.pdf
+#			f) phl_admbnda_adm1_psa_namria_20200529				f) worldBarcodeDist_philZoom_NAinclude.pdf
+#											g) geneXyearCollect_NAinclude.pdf
+#											h) geneXyearSubmission_NAinclude.pdf
+#											i) provinceRegionInfo.table
+#											j) refmapRegion_NAinclude.pdf
+#											k) sourceXprocess_matrix_NAinclude.pdf
+#											l) UPDATEworking_barcode_data_NAinclude.table
 
 
 # 08_Analysis1_metagaps_NAexclude.R performs the same set of analyses for data summary and metadata gaps as its NAinclude counterpart 
-#			(07_Analysis1_metagaps_NAinclude.R). The only difference between the two scripts is that a subset of the working barcode data 
-#			table, with records that are NA for country sampled excluded, is used instead. 
+#		(07_Analysis1_metagaps_NAinclude.R). The only difference between the two scripts is that a subset of the working barcode data 
+#		table, with records that are NA for country sampled excluded, is used instead. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) GeneMarker_summary_NAexclude.pdf
-#					b) UPDATEworking_barcode_data_NAinclude.table	b) GeoIssues_summary_NAexclude.pdf
-#																	c) SpeciesID_phylum_NAexclude.pdf
-#																	d) SpeciesID_class_NAexclude.pdf
-#																	e) SpeciesID_order_NAexclude.pdf
-#																	f) SpeciesID_family_NAexclude.pdf
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) GeneMarker_summary_NAexclude.pdf
+#			b) UPDATEworking_barcode_data_NAinclude.table			b) GeoIssues_summary_NAexclude.pdf
+#											c) SpeciesID_phylum_NAexclude.pdf
+#											d) SpeciesID_class_NAexclude.pdf
+#											e) SpeciesID_order_NAexclude.pdf
+#											f) SpeciesID_family_NAexclude.pdf
 
 
 # 08_Analysis2_taxobias_NAexclude.R performs the same set of analyses for taxonomic biases as its NAinclude counterpart (07_Analysis2_taxobias_NAinclude.R). 
-#			The only difference between the two scripts is that a subset of the working barcode data table, with records that are NA for country sampled 
-# 			excluded, is used instead. 
+#		The only difference between the two scripts is that a subset of the working barcode data table, with records that are NA for country sampled 
+# 		excluded, is used instead. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) geneXspecies_phylum_NAexclude.pdf
-#					b) UPDATEworking_barcode_data_NAinclude.table	b) geneXspecies_class_NAexclude.pdf
-#																	c) geneXspecies_order_NAexclude.pdf
-#																	d) geneXspecies_family_NAexclude.pdf
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) geneXspecies_phylum_NAexclude.pdf
+#			b) UPDATEworking_barcode_data_NAinclude.table			b) geneXspecies_class_NAexclude.pdf
+#											c) geneXspecies_order_NAexclude.pdf
+#											d) geneXspecies_family_NAexclude.pdf
 
 
 # 08_Analysis3_spatialbias_NAexclude.R performs the same set of analyses for spatial biases as its NAinclude counterpart (07_Analysis3_spatialbias_NAinclude.R).
-#			The difference between the two scripts is that some steps can be skipped if the updated working barcode data table is used and the records that 
-# 			are NA for country sampled are excluded prior to the analysis. 
+#		The difference between the two scripts is that some steps can be skipped if the updated working barcode data table is used and the records that 
+# 		are NA for country sampled are excluded prior to the analysis. 
 #
-#					INPUT FILES:									OUTPUT FILES:
-#					a) working_species_data_FINAL.table				a) GeneheatmapRawScaleNoBroder_NAexclude.pdf
-#					b) UPDATEworking_barcode_data_NAinclude.table	b) SpeciesheatmapRawScaleNoBorder_NAexclude.pdf
-#					c) phl_admbnda_adm2_psa_namria_20200529			c) geneXspecies_province_NAexclude.pdf
-#					d) resTemp_speciesUpdate.rds					d) worldBarcodeDist_NAexclude.pdf
-#					e) region_name.tsv (*)							e) worldBarcodeDist_philZoom_NAexclude.pdf
-#					f) phl_admbnda_adm1_psa_namria_20200529			f) geneXyearCollect_NAexclude.pdf
-#																	g) geneXyearSubmission_NAexclude.pdf
-#																	h) refmapRegion_NAexclude.pdf
-#																	i) sourceXprocess_matrix_NAexclude.pdf
+#			INPUT FILES:							OUTPUT FILES:
+#			a) working_species_data_FINAL.table				a) GeneheatmapRawScaleNoBroder_NAexclude.pdf
+#			b) UPDATEworking_barcode_data_NAinclude.table			b) SpeciesheatmapRawScaleNoBorder_NAexclude.pdf
+#			c) phl_admbnda_adm2_psa_namria_20200529				c) geneXspecies_province_NAexclude.pdf
+#			d) resTemp_speciesUpdate.rds					d) worldBarcodeDist_NAexclude.pdf
+#			e) region_name.tsv (*)						e) worldBarcodeDist_philZoom_NAexclude.pdf
+#			f) phl_admbnda_adm1_psa_namria_20200529				f) geneXyearCollect_NAexclude.pdf
+#											g) geneXyearSubmission_NAexclude.pdf
+#											h) refmapRegion_NAexclude.pdf
+#											i) sourceXprocess_matrix_NAexclude.pdf
 #
-#					NOTE: files entitled, provinceRegionInfo.table and PHuniversity_province.tsv (*), may be loaded between input files (d) and (e) 
-#					if using the working_barcode_data_FINAL.table for the NAexclude analysis but in this case, updated working barcode data table 
-#					has been used which allows some steps to be skipped.
+#			NOTE: files entitled, provinceRegionInfo.table and PHuniversity_province.tsv (*), may be loaded between input files (d) and (e) 
+#			if using the working_barcode_data_FINAL.table for the NAexclude analysis but in this case, updated working barcode data table 
+#			has been used which allows some steps to be skipped.
 
 
