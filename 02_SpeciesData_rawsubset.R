@@ -21,7 +21,7 @@ library("data.table")
 gbif_complete_data <- fread("gbif04_finalgeo_overall")
 
 # subset GBIF data to contain only metadata of interest for analysis
-complete_gbif_subset <- gbif_complete_data[ , c("gbifID", "eventDate", 
+complete_gbif_subset <- gbif_complete_data[ , c("gbifID", "eventDate", "kingdom",
                                                 "phylum", "class", "order", 
                                                 "family", "genus", "species", 
                                                 "publisher", "publishingCountry",
@@ -30,13 +30,12 @@ complete_gbif_subset <- gbif_complete_data[ , c("gbifID", "eventDate",
                                                 "municipality_final", "barangay_final")]
 
 # relabel columns in complete_gbif_subset for sampling location
-names(complete_gbif_subset)[14:16] <- c("province", "municipality", "barangay")
+names(complete_gbif_subset)[15:17] <- c("province", "municipality", "barangay")
 
 # write output for final raw species data for analysis
 write.table(complete_gbif_subset, 
             file = "/Users/miaberba/Desktop/THESIS/Bio 200/Working Files/overall_species_data", 
             sep = "\t",
             row.names = FALSE)
-
 
 ########## end of script
