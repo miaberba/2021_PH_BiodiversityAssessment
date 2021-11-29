@@ -205,7 +205,7 @@ length(barcode_data_final[(is.na(phylum)|is.na(class)|is.na(order)|is.na(family)
 # subset raw species_data to contain only unique species entries and taxo metadata
 #   NOTE: serve as taxonomic database to fix incomplete taxo info in barcode data
 #   with the assumption that taxonomic info provided in species data is accurate 
-ph_taxa_db <- species_data[!duplicated(species), 3:8]
+ph_taxa_db <- species_data[!duplicated(species), 4:9]
 
 # remove entries from ph_taxa_db that are NA for species
 ph_taxa_db <- ph_taxa_db[!is.na(species), ]
@@ -252,6 +252,40 @@ length(barcode_data_taxa[(is.na(phylumUse)|is.na(classUse)|is.na(orderUse)|is.na
 barcode_data_final <- barcode_data_taxa[ , c(2:33, 1)]
 
 
+###### DOUBLE CHECK - adding Kingdom in Barcode dataset
+
+# define list of animal phyla derived from species_data_final
+animalPhylum <- species_data_final[!duplicated(phylum) & 
+                                     !is.na(phylum) & 
+                                     (kingdom == "Animalia"), ]$phylum
+
+# define list of plant division derived from species_data_final
+plantDivision <- species_data_final[!duplicated(phylum) & 
+                                      !is.na(phylum) & 
+                                      (kingdom == "Plantae"), ]$phylum
+
+# add new column in barcode_data_final
+barcode_data_final$kingdomUse <- NA
+
+# identify indices of entries representing animal taxa  
+animalTaxa <- which(barcode_data_final$phylumUse %in% animalPhylum)
+
+# categorize taxonomic kingdom of identified entried for animal taxa
+barcode_data_final$kingdomUse[animalTaxa] <- "Animalia"
+
+# identify indices of entries representing plant taxa 
+plantTaxa <- which(barcode_data_final$phylumUse %in% plantDivision)
+
+# categorize taxonomic kingdom of identified entried for plant taxa
+barcode_data_final$kingdomUse[plantTaxa] <- "Plantae"
+
+# check for barcode records with NA entries for kingdomUse
+barcode_data_final[is.na(kingdomUse), ]
+
+# edit kingdom entries of records associated with "Mesobiotus " species
+#   NOTE: "Mesobiotus" refers to a genus in Kingdom Animalia
+barcode_data_final[grep("Mesobiotus ", speciesUse), ]$kingdomUse <- "Animalia"
+
 #### 5) This section saves the final working species and barcode data tables ----
 
 # update assignment of row numbers to species and barcode datasets
@@ -266,13 +300,13 @@ length(barcode_data_final$rowID)
 length(species_data_final$rowID)
 
 # write output for final working barcode data table
-fwrite(barcode_data_final, 
-       "/Users/miaberba/Desktop/THESIS/Bio 200/Working Files/working_barcode_data_FINAL.table", 
+fwrite(barcode_data_final,
+       "/Users/miaberba/Desktop/THESIS/Bio 200/Working Files/working_barcode_data_FINAL.table",
        na = NA)
 
 # write output for final working species occurrence data table
-fwrite(species_data_final, 
-       "/Users/miaberba/Desktop/THESIS/Bio 200/Working Files/working_species_data_FINAL.table", 
+fwrite(species_data_final,
+       "/Users/miaberba/Desktop/THESIS/Bio 200/Working Files/working_species_data_FINAL.table",
        na = NA)
 
 
