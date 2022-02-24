@@ -1,6 +1,6 @@
-# 2021_PH_BiodiversityReview
+# 2021_PH_BiodiversityAssessment
 
-# The systematic review of the Philippines' biodiversity is conducted through three approaches:
+# The systematic assessment of the Philippines' biodiversity documentation is conducted through three approaches:
 #	    1) examination for metadata gaps in relation to the completeness of biodiversity records; 
 #	    2) examination for taxonomic biases at the species and genetic levels; and 
 #	    3) examination for spatial biases associated with sampled locations and origin of leading contributors.
@@ -20,7 +20,7 @@
 #	    3) examination of species and genetic data for metadata gaps, taxonomic biases, and spatial biases.
 #            a) Analysis_Nainclude
 #            b) Analysis_Naexclude
-#            * NOTE: both sets of analyses were divided into three (3) R scripts corresponding to each approach of the review
+#            * NOTE: both sets of analyses were divided into three (3) R scripts corresponding to each approach of the study
 
 
 # CONTENTS:
@@ -32,11 +32,11 @@
 #                  – manually edited files needed for different processes
 #                  – supplementary files (e.g., downloaded PH shapefiles)
 #                        > these are needed for the spatial analyses (both in NAinclude and NAexclude)
-#            c) resulting figures (edited and unedited) from the analyses
+#            * NOTE: working directory can be accessed here https://doi.org/10.5281/zenodo.6153441
 
 
 # BRIEF OVERVIEW:
-# (*) - manually edited files using Google Sheet (though may also be done via MS Excel)
+# (*) - manually edited files using Google Sheets (though may also be done via MS Excel)
 
 # 01_GBIF1_dataprocessing.R separately loads the raw animal and plant data obtained from the Global Biodiversity Information Facility (GBIF) database  
 #		and combines them into one dataframe. A subset of GBIF animal and plant data is also generated based on unique species and will be used for 
@@ -252,7 +252,7 @@
 
 
 # 07_Analysis1_metagaps_NAinclude.R summarizes the final barcode and species occurrence data that is analyzed overall count and in terms of each gene 
-#		marker of interest. It also performs the first approach to systematically reviewing Philippine (PH) biodiversity - examination for metadata 
+#		marker of interest. It also performs the first approach to systematically assessing Philippine (PH) biodiversity data - examination for metadata 
 #		gaps. This is done by determining the proportion of missing information for each metadata category of interest (i.e., records and publishing, 
 #		geolocation, and taxonomic information). For taxonomic metadata, we have given focus on comparing the relationship between the rate of species 
 #		identification inbarcode data and the percent of barcoded species represented in barcode and species occurrence data at the phylum, class, order, 
@@ -267,7 +267,7 @@
 #											f) SpeciesID_family_NAinclude.pdf
 
 
-# 07_Analysis2_taxobias_NAinclude.R performs the second approach to systematically reviewing PH biodiversity - examination for taxonomic biases. This 
+# 07_Analysis2_taxobias_NAinclude.R performs the second approach to systematically assessing PH biodiversity data - examination for taxonomic biases. This 
 #		is done by comparing the state of species occurrence and barcode documentation for each taxon at different taxonomic (i.e., phylum, class,
 #		order, and family).This analysis includes barcode records that are NA for the country sampled, despite searches being filtered geographically.
 #
@@ -278,7 +278,7 @@
 #											d) geneXspecies_family_NAinclude.pdf
 
 
-# 07_Analysis3_spatialbias_NAinclude.R performs the third and last approach to systematically reviewing PH biodiversity - examination for spatial 
+# 07_Analysis3_spatialbias_NAinclude.R performs the third and last approach to systematically assessing PH biodiversity data - examination for spatial 
 #		biases. This is done by analyzing for three aspects of spatial bias: (1) sampling distribution of barcode and species data; (2) global 
 #		contribution of barcode data overall and across time; and (3) national contribution of barcode data based on the leading regions 
 #		processing the data versus regions being sampled. This analysis includes barcode records that are NA for the country sampled, despite 
