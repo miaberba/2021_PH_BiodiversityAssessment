@@ -2,7 +2,7 @@
 #     This script summarizes the barcode and species occurrence data to be 
 #     analyzed - overall and in terms of gene marker of interest and taxonomic 
 #     classification. Additionally, it also performs first set of analyses for 
-#     the systematic review of the Philippines' (PH) biodiversity. The objective 
+#     the systematic assessment of Philippine (PH) biodiversity data. The objective 
 #     is to examine for metadata gaps in terms of the completeness of records and 
 #     publishing, geolocation, and taxonomic information. The process is exactly 
 #     the same as the previous script (07) designated to analyzing metadata gaps 

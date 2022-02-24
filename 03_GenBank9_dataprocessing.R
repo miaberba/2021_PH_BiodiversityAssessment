@@ -5,7 +5,7 @@
 #     pull out the sampling location info in terms of Philippine administrative 
 #     units (i.e., province, municipality, barangay). The process involves both
 #     matching explicit entries or patterns with known administrative names and
-#     manually assessing and editing the unique entries via Google Sheet.
+#     manually assessing and editing the unique entries via Google Sheets.
 #     Additionally, coordinate info included in the description are also parsed 
 #     and placed into the appropriate metadata columns.
 

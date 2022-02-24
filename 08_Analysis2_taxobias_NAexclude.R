@@ -1,11 +1,10 @@
 # NOTE:
-#     This script performs second set of analyses for the systematic review
-#     of the Philippines' (PH) biodiversity. The objective is to examine for 
-#     taxonomic biases. The process is exactly the same as the previous script 
-#     (07) designated to comparing the state of species and genetic documentation
-#     at different taxonomic levels. However, here, the barcode data analyzed 
-#     EXCLUDES records that are NA for the country sampled, despite searches 
-#     being filtered geographically. 
+#     This script performs second set of analyses for the systematic assessment 
+#     of PH biodiversity data. The objective is to examine for taxonomic biases. 
+#     The process is exactly the same as the previous script (07) designated to 
+#     comparing the state of species and genetic documentation at different taxonomic
+#     levels. However, here, the barcode data analyzed EXCLUDES records that are NA
+#     for the country sampled, despite searches being filtered geographically. 
 
 
 #############################################

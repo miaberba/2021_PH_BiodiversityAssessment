@@ -1,7 +1,7 @@
 # NOTE: 
 #     This script is the initial step in processing the raw files obtained from
 #     the GenBank database - 1 of 2 databases that comprise the overall barcode
-#     data that will be examined in the review. The raw GenBank files (.gb) need
+#     data that will be examined in the study. The raw GenBank files (.gb) need
 #     to be read through and manually parsed to generate readable individual files  
 #     for each barcode record available. This process is repeated for each file 
 #     associated with a specific gene marker (i.e., COI, CYTB, ITS2, rbcL, or 

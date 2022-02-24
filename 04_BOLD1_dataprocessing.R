@@ -1,7 +1,7 @@
 # NOTE: 
 #     This script is the initial step in processing the raw files obtained from
 #     the Barcode of Life Data System (BOLD) - 1 of 2 databases that comprise 
-#     the overall barcode data that will be examined in the review. The raw BOLD
+#     the overall barcode data that will be examined in the study The raw BOLD
 #     data for each animal and plant phylum found in the Philippines (PH) were
 #     downloaded separately and in this script, they are combined into one 
 #     overall raw GBIF dataset that will undergo further processing in later 

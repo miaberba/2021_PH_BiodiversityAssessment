@@ -1,6 +1,6 @@
 # NOTE: 
 #     This script is the first step in processing the species occurrence data
-#     that will be used in the review. In this case, the raw data was only 
+#     that will be used in the study In this case, the raw data was only 
 #     obtained from the Global Biodiversity Information Facility (GBIF) database.
 #     The raw GBIF data for animal and plant taxa found in the Philippines (PH) 
 #     were downloaded separately and in this script, they are combined into one 

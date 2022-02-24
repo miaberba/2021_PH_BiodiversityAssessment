@@ -3,7 +3,7 @@
 #     most updated raw BOLD dataset (02), which focuses on the publishing 
 #     country metadata. The process involves identifying the unique entries 
 #     for publishing institution and manually assigning the country from which
-#     the institution is based via Google Sheet. Because the raw dataset directly
+#     the institution is based via Google Sheets. Because the raw dataset directly
 #     downloaded from the BOLD website had no metadata explicitly for publishing
 #     institution, only metadata available that may be appropriate are
 #     institution_storing, copyright_institutions, and sequencing_centers. Thus,

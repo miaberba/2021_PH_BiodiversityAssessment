@@ -1,13 +1,13 @@
 # NOTE:
 #     This script performs third and last set of analyses for the systematic 
-#     review of the Philippines' (PH) biodiversity. The objective is to examine
-#     for spatial biases in terms of sampling locations and origin of barcode
-#     contributors at a global and national scale. The process is highly similar 
-#     as the previous script (07) designated to analyzing for biases in sampling
-#     location and contribution, with some steps that may be skipped when using
-#     the updated working barcode data table. Additionally, here, the barcode  
-#     data analyzed EXCLUDES records that are NA for the country sampled, despite 
-#     searches being filtered geographically.
+#     assessment of PH biodiversity data. The objective is to examine for spatial 
+#     biases in terms of sampling locations and origin of barcode contributors at 
+#     a global and national scale. The process is highly similar as the previous 
+#     script (07) designated to analyzing for biases in sampling location and 
+#     contribution, with some steps that may be skipped when using the updated 
+#     working barcode data table. Additionally, here, the barcode data analyzed 
+#     EXCLUDES records that are NA for the country sampled, despite searches 
+#     being filtered geographically.
 
 
 #############################################
